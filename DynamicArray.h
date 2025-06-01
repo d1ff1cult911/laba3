@@ -22,7 +22,6 @@ private:
 public:
     DynamicArray() = default;
 
-    // Copy constructor
     DynamicArray(const DynamicArray& other)
         : capacity(other.capacity), size(other.size)
     {
@@ -31,7 +30,6 @@ public:
             data[i] = other.data[i];
     }
 
-    // Copy assignment
     DynamicArray& operator=(const DynamicArray& other) {
         if (this != &other) {
             delete[] data;
@@ -44,7 +42,7 @@ public:
         return *this;
     }
 
-    // Move constructor
+
     DynamicArray(DynamicArray&& other) noexcept
         : data(other.data), capacity(other.capacity), size(other.size)
     {
@@ -53,7 +51,7 @@ public:
         other.size = 0;
     }
 
-    // Move assignment
+
     DynamicArray& operator=(DynamicArray&& other) noexcept {
         if (this != &other) {
             delete[] data;
