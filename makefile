@@ -1,20 +1,25 @@
+# Компилятор и флаги
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -I.
-LDFLAGS =
+CXXFLAGS = -std=c++17 -Wall -Wextra -I. -g
 
+# Главный исполняемый файл
+EXEC = main
+
+# Исходные файлы
 SRC = main.cpp
-OBJ = $(SRC:.cpp=.o)
-EXEC = main.exe
 
+# Заголовочные зависимости (не компилируются напрямую, но важны для перезапуска)
+HEADERS = RectangularMatrix.h ArraySequence.h Sequence.h DynamicArray.h Student.h Teacher.h
+
+# Цель по умолчанию
 all: $(EXEC)
 
-$(EXEC): $(OBJ)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+# Правило сборки основного исполняемого файла
+$(EXEC): $(SRC) $(HEADERS)
+	$(CXX) $(CXXFLAGS) $(SRC) -o $(EXEC)
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
+# Очистка
 clean:
-	rm -f $(OBJ) $(EXEC)
+	rm -f $(EXEC)
 
 .PHONY: all clean

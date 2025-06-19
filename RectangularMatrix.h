@@ -1,9 +1,11 @@
 #pragma once
 #include "ArraySequence.h"
+#include "utils.h"
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
 #include <utility>
+#include <complex>
 
 template <typename T>
 class RectangularMatrix {
@@ -27,8 +29,7 @@ public:
         }
     }
 
-    RectangularMatrix(const RectangularMatrix& o)
-        : rows(o.rows), cols(o.cols)
+    RectangularMatrix(const RectangularMatrix& o): rows(o.rows), cols(o.cols)
     {
         for (size_t i = 0; i < rows; ++i) {
             ArraySequence<T> row;
@@ -122,9 +123,6 @@ public:
     friend RectangularMatrix operator*(RectangularMatrix a, const T& k) {
         return a *= k;
     }
-    friend RectangularMatrix operator*(const T& k, RectangularMatrix a) {
-        return a *= k;
-    }
 
     double norm() const {
         double s=0;
@@ -163,17 +161,15 @@ public:
         for (size_t i=0;i<rows;++i) at(i,dst)+=at(i,src)*k;
     }
 
-    template<typename F>
-    void map(F f){
-        for (auto& v:*this) v=f(v);
-    }
-    template<typename R,typename F>
-    R reduce(R init,F f)const{
-        for (size_t i=0;i<rows;++i)
-            for (size_t j=0;j<cols;++j)
-                init=f(init,at(i,j));
-        return init;
-    }
+template <typename Func>
+RectangularMatrix<T> Map(Func f) const {
+    RectangularMatrix<T> result(rows, cols);
+    for (size_t i = 0; i < rows; ++i)
+        for (size_t j = 0; j < cols; ++j)
+            result.at(i,j) = f(at(i,j));
+    return result;
+}
+
 
     template<typename U>
     friend RectangularMatrix<std::pair<T,U>>
